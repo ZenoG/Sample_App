@@ -19,6 +19,11 @@ describe User do
 
   it { should be_valid }
 
+describe "remember token" do
+    before { @user.save }
+    its(:remember_token) { should_not be_blank }
+  end
+
   describe "when name is not present" do
     before { @user.name = " " }
     it { should_not be_valid }
@@ -40,11 +45,6 @@ describe User do
   describe "when password doesn't match confirmation" do
     before { @user.password_confirmation = "mismatch" }
     it { should_not be_valid }
-  end
-
-  describe "remember token" do
-    before { @user.save }
-    its(:remember_token) { should_not be_blank }
   end
 
 describe "when email format is invalid" do
