@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
-before_action :signed_in_user, only: [:index, :edit, :update, :destroy]
-before_action :correct_user,   only: [:edit, :update]
-before_action :admin_user,     only: :destroy
+before_filter :signed_in_user, only: [:index, :edit, :update, :destroy]
+before_filter :correct_user,   only: [:edit, :update]
+before_filter :admin_user,     only: :destroy
+  
+  def index
+    @users = User.paginate(page: params[:page])
+  end
   
   def show
     @user = User.find(params[:id])
@@ -11,11 +15,7 @@ before_action :admin_user,     only: :destroy
   def new
     @user = User.new
   end
-
-  def index
-    @users = User.paginate(page: params[:page])
-  end
-
+  
   def destroy
     User.find(params[:id]).destroy
     flash[:success] = "User deleted."
